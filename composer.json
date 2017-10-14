@@ -1,0 +1,30 @@
+{
+    "name": "thytanium/database",
+    "description": "Every-day database utils for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alejandro González",
+            "email": "ale@thytanium.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Thytanium\\Database\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "illuminate/database": "^5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "thytanium/tester": "^0.0.5"
+    }
+}
