@@ -22,7 +22,7 @@ trait HasPosition
     /**
      * Query scope for static::$positionColumn attribute.
      * 
-     * @param  mixed $query
+     * @param  Illuminate\Database\Query\Builder $query
      * @param  int $position
      * @return Illuminate\Database\Query\Builder
      */
@@ -31,26 +31,62 @@ trait HasPosition
         return $query->where(static::$positionColumn, $position);
     }
 
+    /**
+     * Query scope: position greater than X.
+     * 
+     * @param  Illuminate\Database\Query\Builder $query
+     * @param  integer $position
+     * @return Illuminate\Database\Query\Builder
+     */
     public function scopePositionGt($query, $position)
     {
         return $query->where(static::$positionColumn, '>', $position);
     }
 
+    /**
+     * Query scope: position greater than or equal to X.
+     * 
+     * @param  Illuminate\Database\Query\Builder $query
+     * @param  integer $position
+     * @return Illuminate\Database\Query\Builder
+     */
     public function scopePositionGte($query, $position)
     {
         return $query->where(static::$positionColumn, '>=', $position);
     }
 
+    /**
+     * Query scope: position less than X.
+     * 
+     * @param  Illuminate\Database\Query\Builder $query
+     * @param  integer $position
+     * @return Illuminate\Database\Query\Builder
+     */
     public function scopePositionLt($query, $position)
     {
         return $query->where(static::$positionColumn, '<', $position);
     }
 
+    /**
+     * Query scope: position less than or equal to X.
+     * 
+     * @param  Illuminate\Database\Query\Builder $query
+     * @param  integer $position
+     * @return Illuminate\Database\Query\Builder
+     */
     public function scopePositionLte($query, $position)
     {
         return $query->where(static::$positionColumn, '<=', $position);
     }
 
+    /**
+     * Query scope: position between.
+     * 
+     * @param  Illuminate\Database\Query\Builder $query
+     * @param  integer $one
+     * @param  integer $two
+     * @return Illuminate\Database\Query\Builder
+     */
     public function scopePositionBetween($query, $one, $two)
     {
         return $query->whereBetween(static::$positionColumn, [$one, $two]);
@@ -108,7 +144,7 @@ trait HasPosition
         }
 
         // Check if position is taken
-        $taken = $this->taken($target);
+        $taken = static::taken($target);
 
         // Work with absolute step value from now on
         // since we already now if we're going up or down.
@@ -153,6 +189,28 @@ trait HasPosition
         $step = $position - $this->{static::$positionColumn};
 
         return $this->move($step);
+    }
+
+    /**
+     * Move to first position.
+     * 
+     * @return static
+     */
+    public function moveFirst()
+    {
+        return $this->moveTo(1);
+    }
+
+    /**
+     * Move to last position.
+     * 
+     * @return static
+     */
+    public function moveLast()
+    {
+        $target = static::max(static::$positionColumn);
+
+        return $this->moveTo($target);
     }
 
     /**
@@ -210,7 +268,7 @@ trait HasPosition
      * @param  integer $position
      * @return boolean
      */
-    public function taken($position)
+    public static function taken($position)
     {
         return static::position($position)->count() > 0;
     }

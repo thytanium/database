@@ -212,4 +212,48 @@ class HasPositionTest extends TestCase
         $this->assertEquals(2, $two->position);
         $this->assertEquals(3, $one->position);
     }
+
+    /**
+     * Test valid moveLast().
+     * 
+     * @return void
+     */
+    public function test_move_last()
+    {
+        $one = TestModel::create(['name' => 'model-1', 'position' => 1]);
+        TestModel::create(['name' => 'model-2', 'position' => 2]);
+        TestModel::create(['name' => 'model-3', 'position' => 3]);
+
+        // Move last
+        $one->moveLast();
+
+        $two = TestModel::findByName('model-2');
+        $three = TestModel::findByName('model-3');
+
+        $this->assertEquals(1, $two->position);
+        $this->assertEquals(2, $three->position);
+        $this->assertEquals(3, $one->position);
+    }
+
+    /**
+     * Test valid moveFirst().
+     * 
+     * @return void
+     */
+    public function test_move_first()
+    {
+        TestModel::create(['name' => 'model-1', 'position' => 1]);
+        TestModel::create(['name' => 'model-2', 'position' => 2]);
+        $three = TestModel::create(['name' => 'model-3', 'position' => 3]);
+
+        // Move first
+        $three->moveFirst();
+
+        $one = TestModel::findByName('model-1');
+        $two = TestModel::findByName('model-2');
+
+        $this->assertEquals(1, $three->position);
+        $this->assertEquals(2, $one->position);
+        $this->assertEquals(3, $two->position);
+    }
 }
