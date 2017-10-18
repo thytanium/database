@@ -146,4 +146,70 @@ class HasPositionTest extends TestCase
         $this->assertEquals(2, $one->position);
         $this->assertEquals(3, $three->position);
     }
+
+    /**
+     * Test valid moveTo().
+     * 
+     * @return void
+     */
+    public function test_move_to()
+    {
+        $one = TestModel::create(['name' => 'model-1', 'position' => 1]);
+        TestModel::create(['name' => 'model-2', 'position' => 2]);
+        TestModel::create(['name' => 'model-3', 'position' => 3]);
+
+        // Move to end
+        $one->moveTo(4);
+
+        $two = TestModel::findByName('model-2');
+        $three = TestModel::findByName('model-3');
+
+        $this->assertEquals(2, $two->position);
+        $this->assertEquals(3, $three->position);
+        $this->assertEquals(4, $one->position);
+    }
+
+    /**
+     * Test valid swap() with number.
+     * 
+     * @return void
+     */
+    public function test_swap_with_number()
+    {
+        $one = TestModel::create(['name' => 'model-1', 'position' => 1]);
+        TestModel::create(['name' => 'model-2', 'position' => 2]);
+        TestModel::create(['name' => 'model-3', 'position' => 3]);
+
+        // Swap
+        $one->swap(3);
+
+        $two = TestModel::findByName('model-2');
+        $three = TestModel::findByName('model-3');
+
+        $this->assertEquals(1, $three->position);
+        $this->assertEquals(2, $two->position);
+        $this->assertEquals(3, $one->position);
+    }
+
+    /**
+     * Test valid swap() with model.
+     * 
+     * @return void
+     */
+    public function test_swap_with_model()
+    {
+        $one = TestModel::create(['name' => 'model-1', 'position' => 1]);
+        TestModel::create(['name' => 'model-2', 'position' => 2]);
+        $three = TestModel::create(['name' => 'model-3', 'position' => 3]);
+
+        // Swap
+        $one->swap($three);
+
+        $two = TestModel::findByName('model-2');
+        $three = TestModel::findByName('model-3');
+
+        $this->assertEquals(1, $three->position);
+        $this->assertEquals(2, $two->position);
+        $this->assertEquals(3, $one->position);
+    }
 }
