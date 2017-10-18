@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<phpunit colors="true" bootstrap="vendor/autoload.php">
+<phpunit colors="true"
+    bootstrap="vendor/autoload.php"
+    stopOnError="true">
     <testsuites>
         <testsuite name="Test suite">
             <directory>tests/</directory>
