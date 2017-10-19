@@ -256,4 +256,21 @@ class HasPositionTest extends TestCase
         $this->assertEquals(2, $one->position);
         $this->assertEquals(3, $two->position);
     }
+
+    /**
+     * Test next available position.
+     * 
+     * @return void
+     */
+    public function test_next_position()
+    {
+        TestModel::create(['name' => 'model-1', 'position' => 1]);
+        TestModel::create(['name' => 'model-2', 'position' => 2]);
+
+        $this->assertEquals(3, TestModel::nextPosition());
+
+        TestModel::create(['name' => 'model-3', 'position' => 4]);
+
+        $this->assertEquals(5, TestModel::nextPosition());
+    }
 }

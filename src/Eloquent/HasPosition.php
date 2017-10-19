@@ -272,4 +272,14 @@ trait HasPosition
     {
         return static::position($position)->count() > 0;
     }
+
+    /**
+     * Determine next position.
+     * 
+     * @return integer
+     */
+    public static function nextPosition()
+    {
+        return static::max(static::$positionColumn) + 1;
+    }
 }
