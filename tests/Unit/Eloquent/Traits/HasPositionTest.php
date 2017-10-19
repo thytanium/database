@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Unit\Eloquent;
+namespace Tests\Unit\Eloquent\Traits;
 
 use Illuminate\Database\Query\Builder;
+use Tests\Unit\Eloquent\TestModel;
 use Thytanium\Tests\DatabaseMigrations;
 use Thytanium\Tests\TestCase;
 
@@ -181,7 +182,7 @@ class HasPositionTest extends TestCase
         TestModel::create(['name' => 'model-3', 'position' => 3]);
 
         // Swap
-        $one->swap(3);
+        $one->swapPositions(3);
 
         $two = TestModel::findByName('model-2');
         $three = TestModel::findByName('model-3');
@@ -203,7 +204,7 @@ class HasPositionTest extends TestCase
         $three = TestModel::create(['name' => 'model-3', 'position' => 3]);
 
         // Swap
-        $one->swap($three);
+        $one->swapPositions($three);
 
         $two = TestModel::findByName('model-2');
         $three = TestModel::findByName('model-3');

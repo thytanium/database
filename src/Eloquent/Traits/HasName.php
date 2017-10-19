@@ -1,6 +1,6 @@
 <?php
 
-namespace Thytanium\Database\Eloquent;
+namespace Thytanium\Database\Eloquent\Traits;
 
 trait HasName
 {

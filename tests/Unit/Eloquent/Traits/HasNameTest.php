@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Unit\Eloquent;
+namespace Tests\Unit\Eloquent\Traits;
 
 use Illuminate\Database\Query\Builder;
+use Tests\Unit\Eloquent\TestModel;
 use Thytanium\Database\Eloquent\HasName;
 use Thytanium\Tests\DatabaseMigrations;
 use Thytanium\Tests\TestCase;

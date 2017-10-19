@@ -1,6 +1,6 @@
 <?php
 
-namespace Thytanium\Database\Eloquent;
+namespace Thytanium\Database\Eloquent\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -102,7 +102,7 @@ trait HasPosition
     {
         // Only when position > 1 or being forced
         if ($this->{static::$positionColumn} > 1) {
-            return $this->move(-$step);
+            return $this->movePosition(-$step);
         }
 
         return $this;
@@ -116,7 +116,7 @@ trait HasPosition
      */
     public function moveDown($step = 1)
     {
-        return $this->move($step);
+        return $this->movePosition($step);
     }
 
     /**
@@ -125,7 +125,7 @@ trait HasPosition
      * @param  integer  $step
      * @return static
      */
-    public function move($step)
+    public function movePosition($step)
     {
         // Column name
         $column = static::$positionColumn;
@@ -144,7 +144,7 @@ trait HasPosition
         }
 
         // Check if position is taken
-        $taken = static::taken($target);
+        $taken = static::positionTaken($target);
 
         // Work with absolute step value from now on
         // since we already now if we're going up or down.
@@ -188,7 +188,7 @@ trait HasPosition
     {
         $step = $position - $this->{static::$positionColumn};
 
-        return $this->move($step);
+        return $this->movePosition($step);
     }
 
     /**
@@ -219,7 +219,7 @@ trait HasPosition
      * @param  integer|static $position
      * @return static
      */
-    public function swap($position)
+    public function swapPositions($position)
     {
         if (is_object($position) && $position instanceof Model) {
             $target = $position;
@@ -268,7 +268,7 @@ trait HasPosition
      * @param  integer $position
      * @return boolean
      */
-    public static function taken($position)
+    public static function positionTaken($position)
     {
         return static::position($position)->count() > 0;
     }
