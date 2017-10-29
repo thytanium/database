@@ -13,7 +13,11 @@ trait HasName
      */
     public function scopeName($query, $name)
     {
-        return $query->where('name', $name);
+        if (is_array($name)) {
+            return $query->whereIn('name', $name);
+        } else {
+            return $query->where('name', $name);
+        }
     }
 
     /**

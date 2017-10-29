@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\DB;
 trait HasPosition
 {
     /**
+     * Establish the position pivots.
+     * @var array
+     */
+    public static $positionPivots = [];
+
+    /**
      * Field name.
      * @var string
      */

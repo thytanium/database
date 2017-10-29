@@ -3,7 +3,7 @@
 namespace Tests\Unit\Eloquent\Traits;
 
 use Illuminate\Database\Query\Builder;
-use Tests\Unit\Eloquent\TestModel;
+use Tests\Unit\Eloquent\Models\TestModel;
 use Thytanium\Tests\DatabaseMigrations;
 use Thytanium\Tests\TestCase;
 

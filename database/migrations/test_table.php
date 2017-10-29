@@ -8,16 +8,23 @@ class CreateTestTables extends Migration
 {
     public function up()
     {
+        Schema::create('states', function (Blueprint $table) {
+            $table->unsignedInteger('id');
+            $table->string('name');
+            $table->primary('id');
+        });
+
         Schema::create('test_models', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->unsignedInteger('position')->nullable();
+            $table->unsignedInteger('state_id')->nullable();
         });
-    }
 
-    public function down()
-    {
-        Schema::drop('test_models');
+        Schema::create('stateful_models', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('state_id')->nullable();
+        });
     }
 }
