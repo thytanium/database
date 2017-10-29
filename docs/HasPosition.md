@@ -24,7 +24,7 @@ $myModel->moveDown();
 Moves the model down 1 space. The model located below is moved up.
 
 ```php
-$myModel->moveUp(3);
+$myModel->moveDown(3);
 ```
 Moves the model down 3 spaces. The models located below are moved up.
 
