@@ -20,6 +20,8 @@ class StateSeeder extends Seeder
             ['id' => 2, 'name' => 'Banned'],
             ['id' => 3, 'name' => 'Suspended'],
             ['id' => 4, 'name' => 'Accepted'],
+            ['id' => 5, 'name' => 'Published'],
+            ['id' => 6, 'name' => 'Draft'],
         ]);
     }
 }

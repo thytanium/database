@@ -1,27 +1,12 @@
 <?php
 
-namespace Thytanium\Database\Eloquent\Models;
+namespace Thytanium\Database\Eloquent\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Thytanium\Database\Eloquent\Models\State;
 use Thytanium\Database\Exceptions\InvalidStateException;
 
-abstract class Stateful extends Model
+trait HasState
 {
-    /**
-     * Valid states for this model.
-     * 
-     * @var array
-     */
-    public $validStates = [];
-
-    /**
-     * Default state for this model.
-     * 
-     * @var int|null
-     */
-    public $defaultState = null;
-
     /**
      * Mapped valid states.
      *
@@ -30,23 +15,11 @@ abstract class Stateful extends Model
     protected $mapped = null;
 
     /**
-     * New Stateful model instance.
-     * 
-     * @param array $attributes
-     */
-    public function __construct($attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->setAttribute('state_id', $this->defaultState);
-    }
-
-    /**
      * Query scope for specific state.
      * 
-     * @param  Illuminate\Database\Query\Builder $query
+     * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  int $state
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopeHasState($query, $state)
     {
@@ -147,7 +120,7 @@ abstract class Stateful extends Model
     {
         $this->mapped = collect();
 
-        $states = array_map('studly_case', $this->validStates);
+        $states = array_map('studly_case', $this->validStates ?: []);
         $names = array_filter($states, 'is_string');
         $ids = array_filter($states, 'is_integer');
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Unit\Eloquent\Models;
+namespace Tests\Unit\Eloquent\Traits;
 
 use Illuminate\Database\Query\Builder;
 use Tests\Unit\Eloquent\Models\StatefulModel;
-use Tests\Unit\Eloquent\Models\ValidStatesModel;
+use Tests\Unit\Eloquent\Models\TestModel;
 use Thytanium\Database\Eloquent\Models\State;
 use Thytanium\Database\Seeders\StateSeeder;
 use Thytanium\Tests\DatabaseMigrations;
 use Thytanium\Tests\TestCase;
 
-class StatefulTest extends TestCase
+class HasStateTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -35,7 +35,7 @@ class StatefulTest extends TestCase
      */
     public function test_state_scope($state)
     {
-        $query = StatefulModel::hasState($state)->getQuery();
+        $query = TestModel::hasState($state)->getQuery();
 
         $this->assertInstanceOf(Builder::class, $query);
         
@@ -45,7 +45,7 @@ class StatefulTest extends TestCase
             $this->assertCount(2, $wheres);
             $this->assertArraySubset([
                 'type' => 'Column',
-                'first' => 'stateful_models.state_id',
+                'first' => 'test_models.state_id',
                 'operator' => '=',
                 'second' => 'states.id',
             ], $wheres[0]);
@@ -79,7 +79,7 @@ class StatefulTest extends TestCase
      */
     public function test_set_state($state)
     {
-        $model = new StatefulModel;
+        $model = new TestModel;
         $model->setState($state);
 
         $this->assertTrue($model->isState($state));
@@ -98,6 +98,8 @@ class StatefulTest extends TestCase
             ["Banned"],
             ["Suspended"],
             ["Accepted"],
+            ["Published"],
+            ["Draft"],
             [0],
             [1],
             [null],
@@ -112,7 +114,7 @@ class StatefulTest extends TestCase
      */
     public function test_set_invalid_state()
     {
-        $model = new ValidStatesModel;
+        $model = new StatefulModel;
 
         $model->setState('Suspended');
     }
@@ -124,20 +126,8 @@ class StatefulTest extends TestCase
      */
     public function test_null_is_not_inactive()
     {
-        $model = new StatefulModel(['state_id' => null]);
+        $model = new TestModel(['state_id' => null]);
 
         $this->assertFalse($model->isState('Inactive'));
-    }
-
-    /**
-     * Test check default state.
-     * 
-     * @return void
-     */
-    public function test_default_state()
-    {
-        $model = new StatefulModel;
-
-        $this->assertEquals(1, $model->state_id);
     }
 }

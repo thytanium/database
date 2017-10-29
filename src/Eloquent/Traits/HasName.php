@@ -9,7 +9,7 @@ trait HasName
      * 
      * @param  mixed $query
      * @param  string $name
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopeName($query, $name)
     {

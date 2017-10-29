@@ -9,7 +9,7 @@ trait HasEmail
      * 
      * @param  mixed $query
      * @param  string $email
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopeEmail($query, $email)
     {

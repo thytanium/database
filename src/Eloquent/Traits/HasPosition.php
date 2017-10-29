@@ -28,9 +28,9 @@ trait HasPosition
     /**
      * Query scope for static::$positionColumn attribute.
      * 
-     * @param  Illuminate\Database\Query\Builder $query
+     * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  int $position
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopePosition($query, $position)
     {

@@ -2,11 +2,14 @@
 
 namespace Tests\Unit\Eloquent\Models;
 
-use Thytanium\Database\Eloquent\Models\Stateful;
+use Illuminate\Database\Eloquent\Model;
+use Thytanium\Database\Eloquent\Traits\HasState;
 
-class StatefulModel extends Stateful
+class StatefulModel extends Model
 {
-    public $defaultState = 1;
-    public $guarded = [];
+    use HasState;
+
+    public $validStates = ['Inactive', 'Active'];
     public $timestamps = false;
+    public $guarded = [];
 }
