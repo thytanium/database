@@ -14,15 +14,16 @@ class MyModel extends Model
 
 ## Methods
 
-### static::name() Query Scope
+### name
 
 ```php
 MyModel::name('some name');
 ```
 
 Returns `Illuminate\Database\Eloquent\Builder`.
+You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
 
-### static::findByName()
+### findByName
 
 ```php
 MyModel::findByName('some name');
