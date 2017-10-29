@@ -16,12 +16,16 @@ class MyModel extends Model
 
 ### static::name() Query Scope
 
-`MyModel::name('some name');`
+```php
+MyModel::name('some name');
+```
 
 Returns `Illuminate\Database\Eloquent\Builder`.
 
 ### static::findByName()
 
-`MyModel::findByName('some name');`
+```php
+MyModel::findByName('some name');
+```
 
 Returns `MyModel` instance if found or `null` if not found.
