@@ -1,4 +1,4 @@
-# Has Position
+# HasPosition
 
 When your model has a `position` attribute which defines hierarchy/importance among other models.
 
