@@ -40,18 +40,9 @@ class StatesCommand extends Command
     public function handle()
     {
         // If migration option is enabled
-        if ($this->option('migration')) {
+        if ($this->option('migration') === true || $this->option('seed') === false) {
             $this->migration();
-        }
-
-        // If seed option is enabled
-        if ($this->option('seed')) {
-            $this->seed();
-        }
-
-        // If no options enabled
-        if ($this->option('migration') === false && $this->option('seed') === false) {
-            $this->migration();
+        } else if ($this->option('seed') === true) {
             $this->seed();
         }
     }

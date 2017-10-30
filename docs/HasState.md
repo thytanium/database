@@ -2,6 +2,8 @@
 
 When your model has a `state` attribute this trait provides common methods for states.
 
+> You need a `states` database table. A migration can be made for it, read [States console command](StatesCommand.md) for more information. 
+
 ```php
 use Illuminate\Database\Eloquent\Model;
 use Thytanium\Database\Eloquent\Traits\HasState;
@@ -13,6 +15,8 @@ class MyModel extends Model
 ```
 
 ## Predefined states
+
+> If you don't have any states you can fill your database with these predefined states by running `php artisan db:states --seed`. Read [States console command](StatesCommand.md) for more information.
 
 * Inactive
 * Active

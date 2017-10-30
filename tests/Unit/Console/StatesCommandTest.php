@@ -18,32 +18,7 @@ class StatesCommandTest extends TestCase
      */
     public function test_default_flow()
     {
-        $files = m::mock('Illuminate\Filesystem\Filesystem[get,put]');
-        $files->shouldReceive('get')
-            ->once()
-            ->with(realpath(__DIR__.'/../../../database/migrations/states.php'))
-            ->andReturn('migration_contents');
-        $files->shouldReceive('put')
-            ->once()
-            ->with('output_path', 'migration_contents');
-
-        $composer = m::mock('Illuminate\Support\Composer[dumpAutoloads]', [$files]);
-        $composer->shouldReceive('dumpAutoloads')->once();
-
-        $seeder = m::mock('Thytanium\Database\Seeders\StateSeeder[run]');
-        $seeder->shouldReceive('run')
-            ->once()
-            ->withNoArgs();
-
-        $command = m::mock(
-            'Thytanium\Database\Console\StatesCommand[createBaseMigration]',
-            [$composer, $files, $seeder]
-        )->shouldAllowMockingProtectedMethods();
-        $command->shouldReceive('createBaseMigration')
-            ->once()
-            ->andReturn('output_path');
-
-        $this->app[Kernel::class]->registerCommand($command);
+        $this->migration();
 
         $this->artisan('db:states');
     }
@@ -54,6 +29,18 @@ class StatesCommandTest extends TestCase
      * @return void
      */
     public function test_with_migration_option()
+    {
+        $this->migration();
+
+        $this->artisan('db:states', ['--migration' => true]);
+    }
+
+    /**
+     * Flow when --migration option is passed.
+     * 
+     * @return void
+     */
+    protected function migration()
     {
         $files = m::mock('Illuminate\Filesystem\Filesystem[get,put]');
         $files->shouldReceive('get')
@@ -79,8 +66,6 @@ class StatesCommandTest extends TestCase
             ->andReturn('output_path');
 
         $this->app[Kernel::class]->registerCommand($command);
-
-        $this->artisan('db:states', ['--migration' => true]);
     }
 
     /**
