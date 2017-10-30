@@ -15,7 +15,7 @@ class CreateThytaniumDatabaseStatesTable extends Migration
     {
         Schema::create('states', function (Blueprint $table) {
             $table->unsignedInteger('id');
-            $table->string('name');
+            $table->string('name', 32)->index();
             $table->primary('id');
         });
     }
