@@ -17,4 +17,4 @@ The generated migration will be placed in `database/migrations` of your Laravel 
 
 Will run `Thytanium\Database\Seeders\StateSeeder` to fill your database with predefined states.
 
-Once you have you have migrated your `states` database table you can use the very helpful [HasState](../Traits/HasState.md) trait.
+Once you have migrated your `states` database table you can use the very helpful [HasState](../Traits/HasState.md) trait.
