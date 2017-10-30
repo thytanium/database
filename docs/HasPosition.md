@@ -2,6 +2,16 @@
 
 When your model has a `position` attribute which defines hierarchy/importance among other models.
 
+```php
+use Illuminate\Database\Eloquent\Model;
+use Thytanium\Database\Eloquent\Traits\HasPosition;
+
+class MyModel extends Model
+{
+    use HasPosition;
+}
+```
+
 ## Methods
 
 ### moveUp
