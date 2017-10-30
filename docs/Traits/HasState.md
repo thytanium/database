@@ -12,11 +12,11 @@ class MyModel extends Model
 }
 ```
 
-> You need a `states` database table. A migration can be made for it, read [States console command](StatesCommand.md) for more information. 
+> You need a `states` database table. A migration can be made for it, read [States console command](../Console/StatesCommand.md) for more information. 
 
 ## Predefined states
 
-> If you don't have any states you can fill your database with these predefined states by running `php artisan db:states --seed`. Read [States console command](StatesCommand.md) for more information.
+> If you don't have any states you can fill your database with these predefined states by running `php artisan db:states --seed`. Read [States console command](../Console/StatesCommand.md) for more information.
 
 * Inactive
 * Active
