@@ -51,7 +51,7 @@ This way you can forget about validating states. When setting a state in your mo
 this package will automatically check it's valid for this model or 
 throw a `Thytanium\Database\Exceptions\InvalidStateException` when the new state is invalid.
 
-> Of course, you can also omit the `$validStates` property and work with all states.`
+> Of course, you can also omit the `$validStates` property and work with all states.
 
 > This verification is about checking if a new state is between the valid states 
 defined for your model. 
