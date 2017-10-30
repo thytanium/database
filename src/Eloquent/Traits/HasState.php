@@ -51,8 +51,6 @@ trait HasState
             } else {
                 $this->state_id = $state;
             }
-
-            $this->save();
         } else {
             throw new InvalidStateException;
         }
