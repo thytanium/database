@@ -108,7 +108,7 @@ Looks for models with position less than `1`.
 Returns `Illuminate\Database\Eloquent\Builder`.
 You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
 
-### positionGt
+### positionLte
 
 ```php
 MyModel::positionLte(1);
