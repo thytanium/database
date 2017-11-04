@@ -29,9 +29,9 @@ trait HasPosition
     /**
      * Query scope: position greater than X.
      * 
-     * @param  Illuminate\Database\Query\Builder $query
+     * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopePositionGt($query, $position)
     {
@@ -41,9 +41,9 @@ trait HasPosition
     /**
      * Query scope: position greater than or equal to X.
      * 
-     * @param  Illuminate\Database\Query\Builder $query
+     * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopePositionGte($query, $position)
     {
@@ -53,9 +53,9 @@ trait HasPosition
     /**
      * Query scope: position less than X.
      * 
-     * @param  Illuminate\Database\Query\Builder $query
+     * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopePositionLt($query, $position)
     {
@@ -65,9 +65,9 @@ trait HasPosition
     /**
      * Query scope: position less than or equal to X.
      * 
-     * @param  Illuminate\Database\Query\Builder $query
+     * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopePositionLte($query, $position)
     {
@@ -77,14 +77,32 @@ trait HasPosition
     /**
      * Query scope: position between.
      * 
-     * @param  Illuminate\Database\Query\Builder $query
+     * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $one
      * @param  integer $two
-     * @return Illuminate\Database\Query\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopePositionBetween($query, $one, $two)
     {
         return $query->whereBetween($this->getPositionColumn(), [$one, $two]);
+    }
+
+    /**
+     * Scope for pivots.
+     * 
+     * @param  Illuminate\Database\Eloquent\Builder $query
+     * @param  array $inputs
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePositionPivots($query, $inputs)
+    {
+        if (isset($this->positionPivots) && count($inputs)) {
+            foreach ($inputs as $column => $value) {
+                $query->where($column, $value);
+            }
+        }
+
+        return $query;
     }
 
     /**
@@ -303,7 +321,7 @@ trait HasPosition
             throw new PivotValuesException('There are missing pivot values.');
         }
 
-        return static::max($this->getPositionColumn()) + 1;
+        return static::positionPivots($input)->max($this->getPositionColumn()) + 1;
     }
 
     /**

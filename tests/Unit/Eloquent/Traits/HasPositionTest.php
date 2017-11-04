@@ -396,38 +396,44 @@ class HasPositionTest extends TestCase
         PositionPivotModel::nextPosition(['name' => 'model-1']);
     }
 
-    // /**
-    //  * Test nextPosition with pivots.
-    //  * 
-    //  * @return void
-    //  */
-    // public function test_next_position_with_pivots()
-    // {
-    //     // Create first model - type_1.a
-    //     PositionPivotModel::create([
-    //         'name' => 'model-1',
-    //         'type_1' => 'type_1.a',
-    //     ]);
+    /**
+     * Test nextPosition with pivots.
+     * 
+     * @return void
+     */
+    public function test_next_position_with_pivots()
+    {
+        // Create first model - type_1.a
+        $model = PositionPivotModel::create([
+            'name' => 'model-1',
+            'type_1' => 'type_1.a',
+        ]);
 
-    //     $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.a']);
-    //     $this->assertEquals(1, $position);
+        $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.a']);
+        $this->assertEquals(1, $position);
 
-    //     // Create second model - type_1.a
-    //     PositionPivotModel::create([
-    //         'name' => 'model-2',
-    //         'type_1' => 'type_1.a',
-    //     ]);
+        // Update position
+        $model->update(compact('position'));
 
-    //     $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.a']);
-    //     $this->assertEquals(2, $position);
+        // Create second model - type_1.a
+        $model = PositionPivotModel::create([
+            'name' => 'model-2',
+            'type_1' => 'type_1.a',
+        ]);
 
-    //     // Create third model - type_1.b
-    //     PositionPivotModel::create([
-    //         'name' => 'model-3',
-    //         'type_1' => 'type_1.b',
-    //     ]);
+        $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.a']);
+        $this->assertEquals(2, $position);
 
-    //     $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.b']);
-    //     $this->assertEquals(1, $position);
-    // }
+        // Update position
+        $model->update(compact('position'));
+
+        // Create third model - type_1.b
+        PositionPivotModel::create([
+            'name' => 'model-3',
+            'type_1' => 'type_1.b',
+        ]);
+
+        $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.b']);
+        $this->assertEquals(1, $position);
+    }
 }
