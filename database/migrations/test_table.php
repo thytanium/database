@@ -12,6 +12,7 @@ class CreateTestTables extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('email')->nullable();
+            $table->string('another_email')->nullable();
             $table->unsignedInteger('position')->nullable();
             $table->unsignedInteger('state_id')->nullable();
         });

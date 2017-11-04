@@ -9,21 +9,23 @@ trait HasEmail
      * 
      * @param  mixed $query
      * @param  string $email
+     * @param  string $column
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEmail($query, $email)
+    public function scopeEmail($query, $email, $column = 'email')
     {
-        return $query->where('email', $email);
+        return $query->where($column, $email);
     }
 
     /**
      * Find model by 'email' attribute.
      * 
      * @param  string $email
+     * @param  string $column
      * @return static
      */
-    public static function findByEmail($email)
+    public static function findByEmail($email, $column = 'email')
     {
-        return static::email($email)->first();
+        return static::email($email, $column)->first();
     }
 }
