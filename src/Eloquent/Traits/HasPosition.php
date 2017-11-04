@@ -19,11 +19,12 @@ trait HasPosition
      * 
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  int $position
+     * @param  array $pivots
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopePosition($query, $position)
+    public function scopePosition($query, $position, $pivots = [])
     {
-        return $query->where($this->getPositionColumn(), $position);
+        return $query->positionPivots($pivots)->where($this->getPositionColumn(), $position);
     }
 
     /**
@@ -31,11 +32,12 @@ trait HasPosition
      * 
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
+     * @param  array $pivots
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopePositionGt($query, $position)
+    public function scopePositionGt($query, $position, $pivots = [])
     {
-        return $query->where($this->getPositionColumn(), '>', $position);
+        return $query->positionPivots($pivots)->where($this->getPositionColumn(), '>', $position);
     }
 
     /**
@@ -43,11 +45,12 @@ trait HasPosition
      * 
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
+     * @param  array $pivots
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopePositionGte($query, $position)
+    public function scopePositionGte($query, $position, $pivots = [])
     {
-        return $query->where($this->getPositionColumn(), '>=', $position);
+        return $query->positionPivots($pivots)->where($this->getPositionColumn(), '>=', $position);
     }
 
     /**
@@ -55,11 +58,12 @@ trait HasPosition
      * 
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
+     * @param  array $pivots
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopePositionLt($query, $position)
+    public function scopePositionLt($query, $position, $pivots = [])
     {
-        return $query->where($this->getPositionColumn(), '<', $position);
+        return $query->positionPivots($pivots)->where($this->getPositionColumn(), '<', $position);
     }
 
     /**
@@ -67,11 +71,12 @@ trait HasPosition
      * 
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $position
+     * @param  array $pivots
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopePositionLte($query, $position)
+    public function scopePositionLte($query, $position, $pivots = [])
     {
-        return $query->where($this->getPositionColumn(), '<=', $position);
+        return $query->positionPivots($pivots)->where($this->getPositionColumn(), '<=', $position);
     }
 
     /**
@@ -80,11 +85,12 @@ trait HasPosition
      * @param  Illuminate\Database\Eloquent\Builder $query
      * @param  integer $one
      * @param  integer $two
+     * @param  array $pivots
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopePositionBetween($query, $one, $two)
+    public function scopePositionBetween($query, $one, $two, $pivots = [])
     {
-        return $query->whereBetween($this->getPositionColumn(), [$one, $two]);
+        return $query->positionPivots($pivots)->whereBetween($this->getPositionColumn(), [$one, $two]);
     }
 
     /**
@@ -392,5 +398,16 @@ trait HasPosition
         } else {
             return [];
         }
+    }
+
+    /**
+     * New query builder with positionPivots() scope applied
+     * with current pivots values.
+     * 
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function positionQuery()
+    {
+        return $this->query()->positionPivots($this->currentPivotValues());
     }
 }
