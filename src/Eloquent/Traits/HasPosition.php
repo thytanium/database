@@ -4,6 +4,7 @@ namespace Thytanium\Database\Eloquent\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Thytanium\Database\Exceptions\PivotValuesException;
 
 trait HasPosition
 {
@@ -22,7 +23,7 @@ trait HasPosition
      */
     public function scopePosition($query, $position)
     {
-        return $query->where(static::getPositionColumn(), $position);
+        return $query->where($this->getPositionColumn(), $position);
     }
 
     /**
@@ -34,7 +35,7 @@ trait HasPosition
      */
     public function scopePositionGt($query, $position)
     {
-        return $query->where(static::getPositionColumn(), '>', $position);
+        return $query->where($this->getPositionColumn(), '>', $position);
     }
 
     /**
@@ -46,7 +47,7 @@ trait HasPosition
      */
     public function scopePositionGte($query, $position)
     {
-        return $query->where(static::getPositionColumn(), '>=', $position);
+        return $query->where($this->getPositionColumn(), '>=', $position);
     }
 
     /**
@@ -58,7 +59,7 @@ trait HasPosition
      */
     public function scopePositionLt($query, $position)
     {
-        return $query->where(static::getPositionColumn(), '<', $position);
+        return $query->where($this->getPositionColumn(), '<', $position);
     }
 
     /**
@@ -70,7 +71,7 @@ trait HasPosition
      */
     public function scopePositionLte($query, $position)
     {
-        return $query->where(static::getPositionColumn(), '<=', $position);
+        return $query->where($this->getPositionColumn(), '<=', $position);
     }
 
     /**
@@ -83,7 +84,7 @@ trait HasPosition
      */
     public function scopePositionBetween($query, $one, $two)
     {
-        return $query->whereBetween(static::getPositionColumn(), [$one, $two]);
+        return $query->whereBetween($this->getPositionColumn(), [$one, $two]);
     }
 
     /**
@@ -95,7 +96,7 @@ trait HasPosition
     public function moveUp($step = 1)
     {
         // Only when position > 1 or being forced
-        if ($this->{static::getPositionColumn()} > 1) {
+        if ($this->{$this->getPositionColumn()} > 1) {
             return $this->movePosition(-$step);
         }
 
@@ -122,7 +123,7 @@ trait HasPosition
     public function movePosition($step)
     {
         // Column name
-        $column = static::getPositionColumn();
+        $column = $this->getPositionColumn();
 
         // Save current position
         $old = $this->{$column};
@@ -180,7 +181,7 @@ trait HasPosition
      */
     public function moveTo($position)
     {
-        $step = $position - $this->{static::getPositionColumn()};
+        $step = $position - $this->{$this->getPositionColumn()};
 
         return $this->movePosition($step);
     }
@@ -202,7 +203,7 @@ trait HasPosition
      */
     public function moveLast()
     {
-        $target = static::max(static::getPositionColumn());
+        $target = static::max($this->getPositionColumn());
 
         return $this->moveTo($target);
     }
@@ -225,7 +226,7 @@ trait HasPosition
             DB::beginTransaction();
 
             // Get position column name
-            $positionColumn = static::getPositionColumn();
+            $positionColumn = $this->getPositionColumn();
 
             // Current position
             $current = $this->{$positionColumn};
@@ -255,7 +256,7 @@ trait HasPosition
      */
     protected function tempPosition()
     {
-        $this->{static::getPositionColumn()} = static::$insanePosition;
+        $this->{$this->getPositionColumn()} = static::$insanePosition;
         $this->save();
     }
 
@@ -272,12 +273,48 @@ trait HasPosition
 
     /**
      * Determine next position.
-     * 
+     *
+     * @param  array $input Pivot values
      * @return integer
+     * @throws MissingPivotValuesException
      */
-    public static function nextPosition()
+    public static function nextPosition(array $input = [])
     {
-        return static::max(static::getPositionColumn()) + 1;
+        return (new static)->determineNextPosition($input);
+    }
+
+    /**
+     * Determine next position.
+     * 
+     * @param  array  $input
+     * @return integer
+     * @throws MissingPivotValuesException
+     */
+    protected function determineNextPosition(array $input = [])
+    {
+        if (isset($this->positionPivots) && count($input) === 0) {
+            throw new PivotValuesException('Pivot values must be specified.');
+        }
+
+        // Map pivots - remove extra information
+        $input = $this->mapPivots($input);
+
+        if ($this->enoughPivotValues($input) !== true) {
+            throw new PivotValuesException('There are missing pivot values.');
+        }
+
+        return static::max($this->getPositionColumn()) + 1;
+    }
+
+    /**
+     * Determines if pivot values are complete.
+     * 
+     * @param  array  $input
+     * @return boolean
+     */
+    protected function enoughPivotValues(array $input)
+    {
+        return count($input) === count($this->positionPivots);
     }
 
     /**
@@ -285,9 +322,25 @@ trait HasPosition
      * 
      * @return string
      */
-    protected static function getPositionColumn()
+    protected function getPositionColumn()
     {
-        return property_exists(static::class, 'positionColumn') 
-            ? static::$positionColumn : 'position';
+        return isset($this->positionColumn) ? $this->positionColumn : 'position';
+    }
+
+    /**
+     * Map position pivots values with input array.
+     * 
+     * @param  array  $input
+     * @return array
+     */
+    protected function mapPivots(array $input)
+    {
+        if (isset($this->positionPivots)) {
+            return array_filter($input, function ($value, $column) {
+                return in_array($column, $this->positionPivots);
+            }, ARRAY_FILTER_USE_BOTH);
+        } else {
+            return [];
+        }
     }
 }

@@ -3,6 +3,8 @@
 namespace Tests\Unit\Eloquent\Traits;
 
 use Illuminate\Database\Query\Builder;
+use ReflectionClass;
+use Tests\Unit\Eloquent\Models\PositionPivotModel;
 use Tests\Unit\Eloquent\Models\TestModel;
 use Thytanium\Tests\DatabaseMigrations;
 use Thytanium\Tests\TestCase;
@@ -350,4 +352,82 @@ class HasPositionTest extends TestCase
 
         $this->assertEquals(5, TestModel::nextPosition());
     }
+
+    /**
+     * Test mapPivots() protected method.
+     * 
+     * @return void
+     */
+    public function test_map_pivots()
+    {
+        $method = (new ReflectionClass(PositionPivotModel::class))->getMethod('mapPivots');
+        $method->setAccessible(true);
+        $model = new PositionPivotModel;
+
+        $result = $method->invoke($model, [
+            'type_1' => 'type_1.a',
+            'name' => 'some_name',
+        ]);
+
+        $this->assertEquals(['type_1' => 'type_1.a'], $result);
+    }
+
+    /**
+     * Test that calling nextPosition() with no args 
+     * on pivoted model should throw an exception.
+     *
+     * @expectedException Thytanium\Database\Exceptions\PivotValuesException
+     * @return void
+     */
+    public function test_empty_call_next_position_in_pivot_model()
+    {
+        PositionPivotModel::nextPosition();
+    }
+
+    /**
+     * Test that calling nextPosition() with missing pivot values
+     * should throw an exception.
+     *
+     * @expectedException Thytanium\Database\Exceptions\PivotValuesException
+     * @return void
+     */
+    public function test_call_next_position_with_missing_pivot_values()
+    {
+        PositionPivotModel::nextPosition(['name' => 'model-1']);
+    }
+
+    // /**
+    //  * Test nextPosition with pivots.
+    //  * 
+    //  * @return void
+    //  */
+    // public function test_next_position_with_pivots()
+    // {
+    //     // Create first model - type_1.a
+    //     PositionPivotModel::create([
+    //         'name' => 'model-1',
+    //         'type_1' => 'type_1.a',
+    //     ]);
+
+    //     $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.a']);
+    //     $this->assertEquals(1, $position);
+
+    //     // Create second model - type_1.a
+    //     PositionPivotModel::create([
+    //         'name' => 'model-2',
+    //         'type_1' => 'type_1.a',
+    //     ]);
+
+    //     $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.a']);
+    //     $this->assertEquals(2, $position);
+
+    //     // Create third model - type_1.b
+    //     PositionPivotModel::create([
+    //         'name' => 'model-3',
+    //         'type_1' => 'type_1.b',
+    //     ]);
+
+    //     $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.b']);
+    //     $this->assertEquals(1, $position);
+    // }
 }
