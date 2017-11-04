@@ -8,18 +8,6 @@ use Illuminate\Support\Facades\DB;
 trait HasPosition
 {
     /**
-     * Establish the position pivots.
-     * @var array
-     */
-    public static $positionPivots = [];
-
-    /**
-     * Field name.
-     * @var string
-     */
-    public static $positionColumn = 'position';
-
-    /**
      * Temp big position to work with when moving up/down.
      * @var integer
      */
@@ -34,7 +22,7 @@ trait HasPosition
      */
     public function scopePosition($query, $position)
     {
-        return $query->where(static::$positionColumn, $position);
+        return $query->where(static::getPositionColumn(), $position);
     }
 
     /**
@@ -46,7 +34,7 @@ trait HasPosition
      */
     public function scopePositionGt($query, $position)
     {
-        return $query->where(static::$positionColumn, '>', $position);
+        return $query->where(static::getPositionColumn(), '>', $position);
     }
 
     /**
@@ -58,7 +46,7 @@ trait HasPosition
      */
     public function scopePositionGte($query, $position)
     {
-        return $query->where(static::$positionColumn, '>=', $position);
+        return $query->where(static::getPositionColumn(), '>=', $position);
     }
 
     /**
@@ -70,7 +58,7 @@ trait HasPosition
      */
     public function scopePositionLt($query, $position)
     {
-        return $query->where(static::$positionColumn, '<', $position);
+        return $query->where(static::getPositionColumn(), '<', $position);
     }
 
     /**
@@ -82,7 +70,7 @@ trait HasPosition
      */
     public function scopePositionLte($query, $position)
     {
-        return $query->where(static::$positionColumn, '<=', $position);
+        return $query->where(static::getPositionColumn(), '<=', $position);
     }
 
     /**
@@ -95,7 +83,7 @@ trait HasPosition
      */
     public function scopePositionBetween($query, $one, $two)
     {
-        return $query->whereBetween(static::$positionColumn, [$one, $two]);
+        return $query->whereBetween(static::getPositionColumn(), [$one, $two]);
     }
 
     /**
@@ -107,7 +95,7 @@ trait HasPosition
     public function moveUp($step = 1)
     {
         // Only when position > 1 or being forced
-        if ($this->{static::$positionColumn} > 1) {
+        if ($this->{static::getPositionColumn()} > 1) {
             return $this->movePosition(-$step);
         }
 
@@ -134,7 +122,7 @@ trait HasPosition
     public function movePosition($step)
     {
         // Column name
-        $column = static::$positionColumn;
+        $column = static::getPositionColumn();
 
         // Save current position
         $old = $this->{$column};
@@ -192,7 +180,7 @@ trait HasPosition
      */
     public function moveTo($position)
     {
-        $step = $position - $this->{static::$positionColumn};
+        $step = $position - $this->{static::getPositionColumn()};
 
         return $this->movePosition($step);
     }
@@ -214,7 +202,7 @@ trait HasPosition
      */
     public function moveLast()
     {
-        $target = static::max(static::$positionColumn);
+        $target = static::max(static::getPositionColumn());
 
         return $this->moveTo($target);
     }
@@ -236,19 +224,22 @@ trait HasPosition
         if (null !== $target) {
             DB::beginTransaction();
 
+            // Get position column name
+            $positionColumn = static::getPositionColumn();
+
             // Current position
-            $current = $this->{static::$positionColumn};
-            $new = $target->{static::$positionColumn};
+            $current = $this->{$positionColumn};
+            $new = $target->{$positionColumn};
 
             // Assign temporary position
             $this->tempPosition();
 
             // Target position
-            $target->{static::$positionColumn} = $current;
+            $target->{$positionColumn} = $current;
             $target->save();
 
             // New position
-            $this->{static::$positionColumn} = $new;
+            $this->{$positionColumn} = $new;
             $this->save();
 
             DB::commit();
@@ -264,7 +255,7 @@ trait HasPosition
      */
     protected function tempPosition()
     {
-        $this->{static::$positionColumn} = static::$insanePosition;
+        $this->{static::getPositionColumn()} = static::$insanePosition;
         $this->save();
     }
 
@@ -286,6 +277,17 @@ trait HasPosition
      */
     public static function nextPosition()
     {
-        return static::max(static::$positionColumn) + 1;
+        return static::max(static::getPositionColumn()) + 1;
+    }
+
+    /**
+     * Get position column name.
+     * 
+     * @return string
+     */
+    protected static function getPositionColumn()
+    {
+        return property_exists(static::class, 'positionColumn') 
+            ? static::$positionColumn : 'position';
     }
 }

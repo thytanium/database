@@ -31,6 +31,82 @@ class HasPositionTest extends TestCase
     }
 
     /**
+     * Test positionGt() returns a valid query.
+     * 
+     * @return void
+     */
+    public function test_position_gt_scope()
+    {
+        // Apply the query scope
+        $query = TestModel::positionGt(1)->getQuery();
+
+        $this->assertInstanceOf(Builder::class, $query);
+        $this->assertCount(1, $query->wheres);
+        $this->assertArraySubset([
+            'column' => 'position',
+            'operator' => '>',
+            'value' => 1,
+        ], $query->wheres[0]);
+    }
+
+    /**
+     * Test positionGte() returns a valid query.
+     * 
+     * @return void
+     */
+    public function test_position_gte_scope()
+    {
+        // Apply the query scope
+        $query = TestModel::positionGte(1)->getQuery();
+
+        $this->assertInstanceOf(Builder::class, $query);
+        $this->assertCount(1, $query->wheres);
+        $this->assertArraySubset([
+            'column' => 'position',
+            'operator' => '>=',
+            'value' => 1,
+        ], $query->wheres[0]);
+    }
+
+    /**
+     * Test positionLt() returns a valid query.
+     * 
+     * @return void
+     */
+    public function test_position_lt_scope()
+    {
+        // Apply the query scope
+        $query = TestModel::positionLt(1)->getQuery();
+
+        $this->assertInstanceOf(Builder::class, $query);
+        $this->assertCount(1, $query->wheres);
+        $this->assertArraySubset([
+            'column' => 'position',
+            'operator' => '<',
+            'value' => 1,
+        ], $query->wheres[0]);
+    }
+
+    /**
+     * Test positionLte() returns a valid query.
+     * 
+     * @return void
+     */
+    public function test_position_lte_scope()
+    {
+        // Apply the query scope
+        $query = TestModel::positionLte(1)->getQuery();
+
+        $this->assertInstanceOf(Builder::class, $query);
+        $this->assertCount(1, $query->wheres);
+        $this->assertArraySubset([
+            'column' => 'position',
+            'operator' => '<=',
+            'value' => 1,
+        ], $query->wheres[0]);
+    }
+
+    /**
      * Test moveUp() doesn't move model at top.
      * 
      * @return void
