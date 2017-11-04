@@ -436,4 +436,74 @@ class HasPositionTest extends TestCase
         $position = PositionPivotModel::nextPosition(['type_1' => 'type_1.b']);
         $this->assertEquals(1, $position);
     }
+
+    /**
+     * Test valid movePosition() with pivots.
+     * 
+     * @return void
+     */
+    public function test_move_position_with_pivots()
+    {
+        $typeA = 'type_1.a';
+        $typeB = 'type_1.b';
+
+        PositionPivotModel::create(['name' => 'model-1', 'type_1' => $typeA, 'position' => 1]);
+        $two = PositionPivotModel::create(['name' => 'model-2', 'type_1' => $typeA, 'position' => 2]);
+
+        // Move up
+        $two->movePosition(-1);
+
+        $one = PositionPivotModel::findByName('model-1');
+
+        $this->assertEquals(2, $one->position);
+        $this->assertEquals(1, $two->position);
+
+        // Different type models
+        $three = PositionPivotModel::create(['name' => 'model-3', 'type_1' => $typeB, 'position' => 1]);
+        PositionPivotModel::create(['name' => 'model-4', 'type_1' => $typeB, 'position' => 2]);
+
+        $three->movePosition(-1);
+
+        $one = PositionPivotModel::findByName('model-1');
+        $two = PositionPivotModel::findByName('model-2');
+        $four = PositionPivotModel::findByName('model-4');
+
+        $this->assertEquals(1, $three->position);
+        $this->assertEquals(2, $four->position);
+        $this->assertEquals(1, $two->position);
+        $this->assertEquals(2, $one->position);
+
+        $four->movePosition(-1);
+
+        $one = PositionPivotModel::findByName('model-1');
+        $two = PositionPivotModel::findByName('model-2');
+        $three = PositionPivotModel::findByName('model-3');
+
+        $this->assertEquals(1, $four->position);
+        $this->assertEquals(2, $three->position);
+        $this->assertEquals(1, $two->position);
+        $this->assertEquals(2, $one->position);
+    }
+
+    /**
+     * Test valid targetFromPosition() with pivots.
+     * 
+     * @return void
+     */
+    public function test_target_from_position_with_pivots()
+    {
+        $method = (new ReflectionClass(PositionPivotModel::class))->getMethod('targetFromPosition');
+        $method->setAccessible(true);
+
+        $typeA = 'type_1.a';
+        $typeB = 'type_1.b';
+
+        $one = PositionPivotModel::create(['name' => 'model-1', 'type_1' => $typeA, 'position' => 1]);
+        $two = PositionPivotModel::create(['name' => 'model-2', 'type_1' => $typeA, 'position' => 2]);
+        $four = PositionPivotModel::create(['name' => 'model-4', 'type_1' => $typeB, 'position' => 2]);
+
+        $target = $method->invoke($one, 2);
+
+        $this->assertEquals($two->name, $target->name);
+    }
 }

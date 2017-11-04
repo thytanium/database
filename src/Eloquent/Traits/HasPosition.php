@@ -178,6 +178,7 @@ trait HasPosition
 
             // Update other models
             static::positionBetween($lower, $higher)
+                ->positionPivots($this->currentPivotValues())
                 ->update([
                     $column => DB::raw("{$column} {$operator} 1"),
                 ]);
@@ -227,6 +228,20 @@ trait HasPosition
     }
 
     /**
+     * Returns target model from provided position.
+     * 
+     * @param  int $position
+     * @return Illuminate\Database\Eloquent\Model|null
+     */
+    protected function targetFromPosition($position)
+    {
+        return static::positionPivots($this->currentPivotValues())
+            ->position($position)
+            ->orderBy('id', 'desc')
+            ->first();
+    }
+
+    /**
      * Swap positions.
      * 
      * @param  integer|static $position
@@ -237,7 +252,7 @@ trait HasPosition
         if (is_object($position) && $position instanceof Model) {
             $target = $position;
         } else {
-            $target = static::position($position)->first();
+            $target = $this->targetFromPosition($position);
         }
 
         if (null !== $target) {
@@ -357,6 +372,23 @@ trait HasPosition
             return array_filter($input, function ($value, $column) {
                 return in_array($column, $this->positionPivots);
             }, ARRAY_FILTER_USE_BOTH);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * Get pivot values for this model.
+     * 
+     * @return array
+     */
+    protected function currentPivotValues()
+    {
+        if (isset($this->positionPivots)) {
+            return array_reduce($this->positionPivots, function ($carry, $column) {
+                $carry[$column] = $this->getAttribute($column);
+                return $carry;
+            }, []);
         } else {
             return [];
         }
