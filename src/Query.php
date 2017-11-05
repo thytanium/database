@@ -1,6 +1,6 @@
 <?php
 
-namespace Thytanium\Database\Query;
+namespace Thytanium\Database;
 
 use Illuminate\Database\Query\Builder;
 
