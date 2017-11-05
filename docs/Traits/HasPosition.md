@@ -1,6 +1,7 @@
 # HasPosition
 
-* [Methods](#Methods)
+- [Usage](#Usage)
+- [Methods](#Methods)
     - [moveUp](#moveUp)
     - [moveDown](#moveDown)
     - [moveTo](#moveTo)
@@ -17,6 +18,8 @@
     - [positionBetween](#positionBetween)
 - [Pivots](#Pivots)
 
+## Usage
+
 When your model has a `position` attribute which defines hierarchy/importance among other models.
 
 ```php
@@ -31,7 +34,7 @@ class MyModel extends Model
 
 ## Methods
 
-###moveUp
+### moveUp
 
 ```php
 $myModel->moveUp();
