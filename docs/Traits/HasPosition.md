@@ -1,5 +1,7 @@
 # HasPosition
 
+When your model has a `position` attribute which defines hierarchy/importance among other models.
+
 - [Usage](#usage)
 - [Methods](#methods)
     - [moveUp](#moveup)
@@ -27,8 +29,6 @@
     - [positionBetween (pivots)](#positionbetween-pivots)
 
 ## Usage
-
-When your model has a `position` attribute which defines hierarchy/importance among other models.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
