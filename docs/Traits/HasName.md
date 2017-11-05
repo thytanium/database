@@ -2,6 +2,13 @@
 
 When your model has a `name` attribute this trait provides common methods for names.
 
+- [Usage](#usage)
+- [Methods](#methods)
+    - [name](#name)
+    - [findByName](#findbyname)
+
+## Usage
+
 ```php
 use Illuminate\Database\Eloquent\Model;
 use Thytanium\Database\Eloquent\Traits\HasName;
