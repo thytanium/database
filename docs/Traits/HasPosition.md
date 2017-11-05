@@ -1,8 +1,8 @@
 # HasPosition
 
 - [Usage](#Usage)
-- [Methods](#Methods)
-    - [moveUp](#moveUp)
+- [Methods](#methods)
+    - [moveUp](#moveup)
     - [moveDown](#moveDown)
     - [moveTo](#moveTo)
     - [moveFirst](#moveFirst)
