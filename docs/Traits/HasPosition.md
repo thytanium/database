@@ -17,6 +17,14 @@
     - [positionLte](#positionlte)
     - [positionBetween](#positionbetween)
 - [Pivots](#pivots)
+    - [positionTaken (pivots)](#positiontaken-pivots)
+    - [nextPosition (pivots)](#nextposition-pivots)
+    - [position (pivots)](#position-pivots)
+    - [positionGt (pivots)](#positiongt-pivots)
+    - [positionGte (pivots)](#positiongte-pivots)
+    - [positionLt (pivots)](#positionlt-pivots)
+    - [positionLte (pivots)](#positionlte-pivots)
+    - [positionBetween (pivots)](#positionbetween-pivots)
 
 ## Usage
 
@@ -187,3 +195,77 @@ class MyModel extends Model
 ```
 
 You can define as many position pivots as you want.
+
+### positionTaken (pivots)
+
+```php
+MyModel::positionTaken(3, ['type' => 'type A']) // True or false
+```
+Determines if a specific position has already been taken.
+
+### nextPosition (pivots)
+
+```php
+MyModel::nextPosition(['type' => 'type A']);
+```
+Returns the next available position for a new model.
+
+### position (pivots)
+
+```php
+MyModel::position(1, ['type' => 'type A']);
+```
+
+Looks for models with position `1`.
+Returns `Illuminate\Database\Eloquent\Builder`.
+You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
+
+### positionGt (pivots)
+
+```php
+MyModel::positionGt(1, ['type' => 'type A']);
+```
+
+Looks for models with position greater than `1`.
+Returns `Illuminate\Database\Eloquent\Builder`.
+You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
+
+### positionGte (pivots)
+
+```php
+MyModel::positionGte(1, ['type' => 'type A']);
+```
+
+Looks for models with position greater than or equal `1`.
+Returns `Illuminate\Database\Eloquent\Builder`.
+You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
+
+### positionLt (pivots)
+
+```php
+MyModel::positionLt(1, ['type' => 'type A']);
+```
+
+Looks for models with position less than `1`.
+Returns `Illuminate\Database\Eloquent\Builder`.
+You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
+
+### positionLte (pivots)
+
+```php
+MyModel::positionLte(1, ['type' => 'type A']);
+```
+
+Looks for models with position less than or equal `1`.
+Returns `Illuminate\Database\Eloquent\Builder`.
+You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
+
+### positionBetween (pivots)
+
+```php
+MyModel::positionBetween(1, 3, ['type' => 'type A']);
+```
+
+Looks for models with positions between `1` and `3`.
+Returns `Illuminate\Database\Eloquent\Builder`.
+You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
