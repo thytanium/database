@@ -168,6 +168,8 @@ model A | type A | 1
 model B | type A | 2
 model C | type B | 1
 
+In this case, the position is bound to the column **Type**, `type A` has an order, `type B` has an order, and so on.
+
 Don't worry, this package can make this work for you.
 
 You only need to define a `$positionPivots` array property in your model:
