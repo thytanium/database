@@ -303,11 +303,12 @@ trait HasPosition
      * Determines whether a specific position has already been taken.
      * 
      * @param  integer $position
+     * @param  array $pivots
      * @return boolean
      */
-    public static function positionTaken($position)
+    public static function positionTaken($position, $pivots = [])
     {
-        return static::position($position)->count() > 0;
+        return static::positionPivots($pivots)->position($position)->count() > 0;
     }
 
     /**
