@@ -1,5 +1,24 @@
 # HasPosition
 
+## Summary
+
+* [Methods](#Methods)
+    - [moveUp](#moveUp)
+    - [moveDown](#moveDown)
+    - [moveTo](#moveTo)
+    - [moveFirst](#moveFirst)
+    - [moveLast](#moveLast)
+    - [swapPositions](#swapPositions)
+    - [positionTaken](#positionTaken)
+    - [nextPosition](#nextPosition)
+    - [position](#position)
+    - [positionGt](#positionGt)
+    - [positionGte](#positionGte)
+    - [positionLt](#positionLt)
+    - [positionLte](#positionLte)
+    - [positionBetween](#positionBetween)
+- [Pivots](#Pivots)
+
 When your model has a `position` attribute which defines hierarchy/importance among other models.
 
 ```php
@@ -108,7 +127,7 @@ Looks for models with position greater than or equal `1`.
 Returns `Illuminate\Database\Eloquent\Builder`.
 You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
 
-### positionGt
+### positionLt
 
 ```php
 MyModel::positionLt(1);
@@ -137,3 +156,31 @@ MyModel::positionBetween(1, 3);
 Looks for models with positions between `1` and `3`.
 Returns `Illuminate\Database\Eloquent\Builder`.
 You can then use any `Builder` method like `get()`, `count()`, `where()` or custom query scopes.
+
+## Pivots
+
+It might happen that your model has a position column bound to another columns. Like this:
+
+Name | Type | Position
+--- | --- | ---
+model A | type A | 1
+model B | type A | 2
+model C | type B | 1
+
+Don't worry, this package can make this work for you.
+
+You only need to define a `$positionPivots` array property in your model:
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Thytanium\Database\Eloquent\Traits\HasPosition;
+
+class MyModel extends Model
+{
+    use HasPosition;
+
+    public $positionPivots = ['type'];
+}
+```
+
+You can define as many position pivots as you want.
