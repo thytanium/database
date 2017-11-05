@@ -1,7 +1,5 @@
 # HasPosition
 
-## Summary
-
 * [Methods](#Methods)
     - [moveUp](#moveUp)
     - [moveDown](#moveDown)
@@ -33,7 +31,7 @@ class MyModel extends Model
 
 ## Methods
 
-### moveUp
+###moveUp
 
 ```php
 $myModel->moveUp();
