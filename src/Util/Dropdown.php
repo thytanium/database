@@ -177,4 +177,43 @@ class Dropdown implements ArrayAccess, Arrayable, Countable
 
         return $this;
     }
+
+    /**
+     * Build Dropdown instance from array.
+     * 
+     * @param  array  $items
+     * @param  string $value
+     * @param  string $label
+     * @return static
+     */
+    public static function build($items = [], $value = 'id', $label = 'name')
+    {
+        $keys = array_keys($items);
+
+        // Create dropdown choices
+        $result = array_reduce($keys, function ($carry, $index) use ($items, $value, $label) {
+            // Get item
+            $item = $items[$index];
+
+            // Get value
+            if (is_callable($value)) {
+                $value = $value($item, $index);
+            } else {
+                $value = $item->{$value};
+            }
+
+            // Get label
+            if (is_callable($label)) {
+                $label = $label($item, $index);
+            } else {
+                $label = $item->{$label};
+            }
+
+            $carry[$value] = $label;
+
+            return $carry;
+        }, []);
+
+        return new static($result);
+    }
 }
