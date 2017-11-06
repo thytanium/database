@@ -192,22 +192,9 @@ class Dropdown implements ArrayAccess, Arrayable, Countable
 
         // Create dropdown choices
         $result = array_reduce($keys, function ($carry, $index) use ($items, $value, $label) {
-            // Get item
             $item = $items[$index];
-
-            // Get value
-            if (is_callable($value)) {
-                $value = $value($item, $index);
-            } else {
-                $value = $item->{$value};
-            }
-
-            // Get label
-            if (is_callable($label)) {
-                $label = $label($item, $index);
-            } else {
-                $label = $item->{$label};
-            }
+            $value = static::extract($item, $index, $value);
+            $label = static::extract($item, $index, $label);
 
             $carry[$value] = $label;
 
@@ -215,5 +202,21 @@ class Dropdown implements ArrayAccess, Arrayable, Countable
         }, []);
 
         return new static($result);
+    }
+
+    /**
+     * Extract target column/callable.
+     * 
+     * @param  mixed $item
+     * @param  string|callback $target
+     * @return string
+     */
+    protected static function extract($item, $index, $target)
+    {
+        if (is_callable($target)) {
+            return call_user_func($target, $item, $index);
+        } else {
+            return $item->{$target};
+        }
     }
 }
