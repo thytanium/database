@@ -136,7 +136,7 @@ class Dropdown implements ArrayAccess, Arrayable, Countable
     public function getTranslator()
     {
         if ($this->trans === null) {
-            $this->trans = app(Translator::class);
+            $this->trans = app('translator');
         }
 
         return $this->trans;
