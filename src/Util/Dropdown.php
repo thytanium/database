@@ -5,6 +5,7 @@ namespace Thytanium\Database\Util;
 use ArrayAccess;
 use Countable;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Support\Arr;
 
 class Dropdown implements ArrayAccess, Arrayable, Countable
@@ -15,13 +16,19 @@ class Dropdown implements ArrayAccess, Arrayable, Countable
     protected $items;
 
     /**
+     * @var Translator
+     */
+    protected $trans;
+
+    /**
      * New Dropdown instance.
      * 
      * @param array $items
      */
-    public function __construct(array $items = [])
+    public function __construct(array $items = [], Translator $trans = null)
     {
         $this->items = $items;
+        $this->trans = $trans;
     }
 
     /**
@@ -117,6 +124,48 @@ class Dropdown implements ArrayAccess, Arrayable, Countable
     public function prepend($label, $value = '')
     {
         $this->items = Arr::prepend($this->items, $label, $value);
+
+        return $this;
+    }
+
+    /**
+     * Get translator instance.
+     * 
+     * @return Translator
+     */
+    public function getTranslator()
+    {
+        if ($this->trans === null) {
+            $this->trans = app(Translator::class);
+        }
+
+        return $this->trans;
+    }
+
+    /**
+     * Set translator instance.
+     * 
+     * @param Translator $translator
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->trans = $translator;
+    }
+
+    /**
+     * Translated dropdown choices.
+     * 
+     * @param  string $namespace
+     * @return $this
+     */
+    public function lang($namespace)
+    {
+        $this->items = array_reduce(array_keys($this->items), function ($carry, $key) use ($namespace) {
+            $item = $this->items[$key];
+            $carry[$key] = $this->trans->has("{$namespace}.{$item}") ?
+                $this->trans->get("{$namespace}.{$item}") : $item;
+            return $carry;
+        }, []);
 
         return $this;
     }

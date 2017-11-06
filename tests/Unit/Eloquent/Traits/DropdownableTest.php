@@ -112,25 +112,4 @@ class DropdownableTest extends TestCase
             1 => 'model-2',
         ], $result->toArray());
     }
-
-    /**
-     * Test with dummy item.
-     * 
-     * @return void
-     */
-    public function test_with_dummy()
-    {
-        $result = TestModel::dropdown()->prepend('dummy');
-
-        $this->assertEquals([
-            '' => 'dummy',
-            1 => 'model-1',
-            2 => 'model-2',
-        ], $result->toArray());
-    }
-
-    // public function test_with_translations()
-    // {
-
-    // }
 }

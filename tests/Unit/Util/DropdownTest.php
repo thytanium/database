@@ -3,6 +3,8 @@
 namespace Tests\Unit\Util;
 
 use Illuminate\Support\Arr;
+use Illuminate\Translation\ArrayLoader;
+use Mockery as m;
 use Thytanium\Database\Util\Dropdown;
 use Thytanium\Tests\TestCase;
 
@@ -110,5 +112,47 @@ class DropdownTest extends TestCase
 
         $this->assertEquals('model-x', Arr::first($dropdown->toArray()));
         $this->assertEquals('model-x', $dropdown['key']);
+    }
+
+    /**
+     * Test lang() method.
+     * 
+     * @return void
+     */
+    public function test_lang()
+    {
+        // Translation namespace
+        $namespace = 'namespace';
+
+        $dropdown = $this->buildDropdown();
+
+        $translator = m::mock('Illuminate\Translation\Translator[has,get]', [new ArrayLoader, 'xx']);
+
+        $translator->shouldReceive('has')
+            ->with("{$namespace}.model-1")
+            ->once()
+            ->andReturn(true);
+
+        $translator->shouldReceive('has')
+            ->with("{$namespace}.model-2")
+            ->once()
+            ->andReturn(true);
+
+        $translator->shouldReceive('get')
+            ->with("{$namespace}.model-1")
+            ->once()
+            ->andReturn('translated_model-1');
+
+        $translator->shouldReceive('get')
+            ->with("{$namespace}.model-2")
+            ->once()
+            ->andReturn('translated_model-2');
+
+        $dropdown->setTranslator($translator);
+
+        $this->assertEquals([
+            1 => 'translated_model-1',
+            2 => 'translated_model-2',
+        ], $dropdown->lang($namespace)->toArray());
     }
 }
