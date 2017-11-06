@@ -160,10 +160,12 @@ class Dropdown implements ArrayAccess, Arrayable, Countable
      */
     public function lang($namespace)
     {
-        $this->items = array_reduce(array_keys($this->items), function ($carry, $key) use ($namespace) {
+        $translator = $this->getTranslator();
+
+        $this->items = array_reduce(array_keys($this->items), function ($carry, $key) use ($namespace, $translator) {
             $item = $this->items[$key];
-            $carry[$key] = $this->trans->has("{$namespace}.{$item}") ?
-                $this->trans->get("{$namespace}.{$item}") : $item;
+            $carry[$key] = $translator->has("{$namespace}.{$item}") ?
+                $translator->get("{$namespace}.{$item}") : $item;
             return $carry;
         }, []);
 
