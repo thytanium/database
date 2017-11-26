@@ -2,33 +2,33 @@
 
 namespace Thytanium\Database\Console;
 
-use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Composer;
 use Thytanium\Database\Seeders\StateSeeder;
+use Thytanium\Migrations\Console\Command;
 
 class StatesCommand extends Command
 {
-    public $signature = 'db:states {--migration} {--seed}';
+    public $signature = 'db:states {--seed}';
 
     public $description = 'Creates migration for states table. Seeds states table.';
 
-    protected $composer;
-    protected $files;
+    /**
+     * @var StateSeeder
+     */
     protected $seeder;
 
     /**
      * New StatesCommand instance.
      * 
-     * @param Composer   $composer
      * @param Filesystem $files
+     * @param Composer   $composer
+     * @param StateSeeder $seeder
      */
-    public function __construct(Composer $composer, Filesystem $files, StateSeeder $seeder)
+    public function __construct(Filesystem $files, Composer $composer, StateSeeder $seeder)
     {
-        parent::__construct();
+        parent::__construct($files, $composer);
 
-        $this->composer = $composer;
-        $this->files = $files;
         $this->seeder = $seeder;
     }
 
@@ -39,28 +39,12 @@ class StatesCommand extends Command
      */
     public function handle()
     {
-        // If migration option is enabled
-        if ($this->option('migration') === true || $this->option('seed') === false) {
+        // If seed option is NOT enabled
+        if ($this->option('seed') === false) {
             $this->migration();
-        } else if ($this->option('seed') === true) {
+        } else {
             $this->seed();
         }
-    }
-
-    /**
-     * Create database migration.
-     * 
-     * @return void
-     */
-    protected function migration()
-    {
-        $fullPath = $this->createBaseMigration();
-
-        $this->files->put($fullPath, $this->files->get(realpath(__DIR__.'/../../database/migrations/states.php')));
-
-        $this->info('Migration created successfully!');
-
-        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -76,16 +60,22 @@ class StatesCommand extends Command
     }
 
     /**
-     * Create a base migration file for the session.
+     * Get path where migration stub is located.
      *
-     * @return string
+     * @return  string
      */
-    protected function createBaseMigration()
+    protected function stubPath()
     {
-        $name = 'create_states_table';
+        return realpath(__DIR__.'/../../database/migrations/states.php');
+    }
 
-        $path = $this->laravel->databasePath().'/migrations';
-
-        return $this->laravel['migration.creator']->create($name, $path);
+    /**
+     * Get a name for this migration.
+     *
+     * @return  string
+     */
+    protected function migrationName()
+    {
+        return 'create_states_table';
     }
 }
