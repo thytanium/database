@@ -2,6 +2,8 @@
 
 namespace Thytanium\Database\Eloquent\Traits;
 
+use Carbon\Carbon;
+
 trait HasLastUsed
 {
     /**
@@ -24,5 +26,18 @@ trait HasLastUsed
     protected function getLastUsedColumn()
     {
         return isset($this->lastUsedColumn) ? $this->lastUsedColumn : 'last_used';
+    }
+
+    /**
+     * Update last_used column.
+     * 
+     * @param  Carbon|null $datetime
+     * @return $this
+     */
+    public function updateLastUsed(Carbon $datetime  = null)
+    {
+        $this->{$this->getLastUsedColumn()} = $datetime ?: Carbon::now()->toDateTimeString();
+
+        return $this;
     }
 }

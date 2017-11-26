@@ -8,6 +8,11 @@ class CreateTestTables extends Migration
 {
     public function up()
     {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
         Schema::create('test_models', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
@@ -15,6 +20,7 @@ class CreateTestTables extends Migration
             $table->string('another_email')->nullable();
             $table->unsignedInteger('position')->nullable();
             $table->unsignedInteger('state_id')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
             $table->dateTime('last_used')->nullable();
         });
 
