@@ -11,11 +11,12 @@ trait ServiceQueriesModels
      *
      * @param  string $builder
      * @param  string $modelClassName
+     * @param  array $params Service constructor params
      * @return mixed
      */
-    protected function buildServiceWithMockedQuery($builder, $modelClassName)
+    protected function buildServiceWithMockedQuery($builder, $modelClassName, $params = [])
     {
-        $service = m::mock($this->serviceClass.'[newQuery]')
+        $service = m::mock($this->serviceClass.'[newQuery]', $params)
             ->shouldAllowMockingProtectedMethods();
 
         $service->shouldReceive('newQuery')
