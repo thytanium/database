@@ -27,6 +27,16 @@ trait BelongsToUser
     }
 
     /**
+     * Set User model class name.
+     * 
+     * @param string $class
+     */
+    public function setUserClass($class)
+    {
+        $this->userClass = $class;
+    }
+
+    /**
      * Get user_id column name.
      * 
      * @return string
