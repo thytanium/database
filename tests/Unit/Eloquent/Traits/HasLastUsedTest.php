@@ -9,6 +9,8 @@ use Thytanium\Tests\TestCase;
 
 class HasLastUsedTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * Test sortByLastUsed() scope.
      * 
@@ -22,6 +24,16 @@ class HasLastUsedTest extends TestCase
             'column' => 'last_used',
             'direction' => 'desc',
         ]], $query->orders);
+
+        $model1 = TestModel::create(['name' => 'model-1', 'last_used' => Carbon::parse('1 month ago')]);
+        $model2 = TestModel::create(['name' => 'model-2', 'last_used' => Carbon::parse('now')]);
+        $model3 = TestModel::create(['name' => 'model-3', 'last_used' => Carbon::parse('1 week ago')]);
+
+        $models = TestModel::sortByLastUsed()->get();
+
+        $this->assertEquals($models->get(0)->name, 'model-2');
+        $this->assertEquals($models->get(1)->name, 'model-3');
+        $this->assertEquals($models->get(2)->name, 'model-1');
     }
 
     /**
