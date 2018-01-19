@@ -354,7 +354,7 @@ trait HasPosition
      */
     protected function enoughPivotValues(array $input)
     {
-        return count($input) === count($this->positionPivots);
+        return count($input) === count($this->positionPivots ?? []);
     }
 
     /**
@@ -364,7 +364,7 @@ trait HasPosition
      */
     protected function getPositionColumn()
     {
-        return isset($this->positionColumn) ? $this->positionColumn : 'position';
+        return $this->positionColumn ?? 'position';
     }
 
     /**

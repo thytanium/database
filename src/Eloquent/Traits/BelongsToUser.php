@@ -23,7 +23,7 @@ trait BelongsToUser
      */
     protected function getUserClass()
     {
-        return isset($this->userClass) ? $this->userClass : 'App/User';
+        return $this->userClass ?? 'App/User';
     }
 
     /**
@@ -43,7 +43,7 @@ trait BelongsToUser
      */
     protected function getUserColumn()
     {
-        return isset($this->userColumn) ? $this->userColumn : 'user_id';
+        return $this->userColumn ?? 'user_id';
     }
 
     /**

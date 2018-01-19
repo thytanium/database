@@ -25,7 +25,7 @@ trait HasLastUsed
      */
     protected function getLastUsedColumn()
     {
-        return isset($this->lastUsedColumn) ? $this->lastUsedColumn : 'last_used';
+        return $this->lastUsedColumn ?? 'last_used';
     }
 
     /**
