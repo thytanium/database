@@ -3,8 +3,7 @@
 namespace Tests\Unit\Eloquent\Traits;
 
 use Tests\Unit\Eloquent\Models\TestModel;
-use Thytanium\Tests\DatabaseMigrations;
-use Thytanium\Tests\TestCase;
+use Thytanium\Tests\{DatabaseMigrations, TestCase};
 
 class DropdownableTest extends TestCase
 {

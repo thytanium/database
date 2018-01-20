@@ -5,8 +5,7 @@ namespace Tests\Unit\Eloquent\Traits;
 use Illuminate\Database\Query\Builder;
 use Tests\Unit\Eloquent\Models\TestModel;
 use Thytanium\Database\Eloquent\HasName;
-use Thytanium\Tests\DatabaseMigrations;
-use Thytanium\Tests\TestCase;
+use Thytanium\Tests\{DatabaseMigrations, TestCase};
 
 class HasNameTest extends TestCase
 {

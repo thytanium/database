@@ -4,10 +4,8 @@ namespace Tests\Unit\Eloquent\Traits;
 
 use Illuminate\Database\Query\Builder;
 use ReflectionClass;
-use Tests\Unit\Eloquent\Models\PositionPivotModel;
-use Tests\Unit\Eloquent\Models\TestModel;
-use Thytanium\Tests\DatabaseMigrations;
-use Thytanium\Tests\TestCase;
+use Tests\Unit\Eloquent\Models\{PositionPivotModel, TestModel};
+use Thytanium\Tests\{DatabaseMigrations, TestCase};
 
 class HasPositionTest extends TestCase
 {

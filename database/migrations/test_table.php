@@ -22,6 +22,7 @@ class CreateTestTables extends Migration
             $table->unsignedInteger('state_id')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->dateTime('last_used')->nullable();
+            $table->dateTime('last_modified')->nullable();
         });
 
         Schema::create('position_pivot_models', function (Blueprint $table) {

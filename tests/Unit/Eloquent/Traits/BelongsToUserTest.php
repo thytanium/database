@@ -2,8 +2,7 @@
 
 namespace Tests\Eloquent\Traits;
 
-use Tests\Unit\Eloquent\Models\TestModel;
-use Tests\Unit\Eloquent\Models\User;
+use Tests\Unit\Eloquent\Models\{User, TestModel};
 use Thytanium\Tests\TestCase;
 
 class BelongsToUserTest extends TestCase
